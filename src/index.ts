@@ -5,9 +5,9 @@ import { startStandaloneServer } from '@apollo/server/standalone'
 import { GraphQLScalarType } from 'graphql'
 import { DateTimeResolver } from 'graphql-scalars'
 import * as tq from 'type-graphql'
-import { Context, context } from './context'
-import { PostCreateInput, PostResolver, SortOrder } from './PostResolver'
-import { UserResolver } from './UserResolver'
+import { Context, context } from './context/index'
+import { PostCreateInput, PostResolver, SortOrder } from './graphql/resolvers/Post/PostResolver'
+import { UserResolver } from './graphql/resolvers/User/UserResolver'
 
 
 const app = async () => {
@@ -25,10 +25,7 @@ const app = async () => {
 
   const { url } = await startStandaloneServer(server, { context: async () => context })
 
-  console.log(`
-🚀 Server ready at: ${url}
-⭐️  See sample queries: http://pris.ly/e/ts/graphql-typegraphql#using-the-graphql-api`
-  )
+  console.log(`🚀 Server ready at: ${url}`)
 }
 
 app()

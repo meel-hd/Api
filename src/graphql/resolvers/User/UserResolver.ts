@@ -1,20 +1,20 @@
 import 'reflect-metadata'
 import {
-  Resolver,
-  Query,
-  Mutation,
   Arg,
   Ctx,
-  FieldResolver,
-  Root,
-  Int,
-  InputType,
   Field,
+  FieldResolver,
+  InputType,
+  Mutation,
+  Query,
+  Resolver,
+  Root
 } from 'type-graphql'
-import { Post } from './Post'
-import { User } from './User'
-import { Context } from './context'
-import { PostCreateInput } from './PostResolver'
+import { Context } from '../../../context'
+import { Post } from '../../schema/Post'
+import { User } from '../../schema/User'
+import { PostCreateInput } from '../Post/PostResolver'
+
 @InputType()
 class UserUniqueInput {
   @Field({ nullable: true })
