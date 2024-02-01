@@ -2,9 +2,7 @@ import 'reflect-metadata'
 import {
   Arg,
   Ctx,
-  Field,
   FieldResolver,
-  InputType,
   Mutation,
   Query,
   Resolver,
@@ -12,29 +10,8 @@ import {
 } from 'type-graphql'
 import { Context } from '../../../context'
 import { Post } from '../../schema/Post'
-import { User } from '../../schema/User'
-import { PostCreateInput } from '../Post/PostResolver'
+import { User, UserCreateInput, UserUniqueInput } from '../../schema/User'
 
-@InputType()
-class UserUniqueInput {
-  @Field({ nullable: true })
-  id: number
-
-  @Field({ nullable: true })
-  email: string
-}
-
-@InputType()
-class UserCreateInput {
-  @Field()
-  email: string
-
-  @Field({ nullable: true })
-  name: string
-
-  @Field((type) => [PostCreateInput], { nullable: true })
-  posts: [PostCreateInput]
-}
 
 @Resolver(User)
 export class UserResolver {
@@ -49,7 +26,7 @@ export class UserResolver {
       .posts()
   }
 
-  @Mutation((returns) => User)
+  @Mutation(() => User)
   async signupUser(
     @Arg('data') data: UserCreateInput,
     @Ctx() ctx: Context,
@@ -74,7 +51,7 @@ export class UserResolver {
     return ctx.prisma.user.findMany()
   }
 
-  @Query((returns) => [Post], { nullable: true })
+  @Query(() => [Post], { nullable: true })
   async draftsByUser(
     @Arg('userUniqueInput') userUniqueInput: UserUniqueInput,
     @Ctx() ctx: Context,

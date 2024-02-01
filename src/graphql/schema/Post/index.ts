@@ -1,30 +1,53 @@
 import 'reflect-metadata'
-import { ObjectType, Field, ID, Int } from 'type-graphql'
+import { Field, ID, InputType, Int, ObjectType } from 'type-graphql'
 import { User } from '../User'
 
 @ObjectType()
 export class Post {
-  @Field((type) => ID)
-  id: number
+  @Field(() => ID)
+  id: string
 
-  @Field((type) => Date)
+  @Field(() => Date)
   createdAt: Date
 
-  @Field((type) => Date)
+  @Field(() => Date)
   updatedAt: Date
 
   @Field()
   title: string
 
-  @Field((type) => String, { nullable: true })
+  @Field(() => String, { nullable: true })
   content: string | null
 
-  @Field((type) => Boolean, { nullable: true })
-  published?: boolean | null
+  @Field(() => Boolean)
+  published: boolean
 
-  @Field((type) => Int)
+  @Field(() => Int)
   viewCount: number
 
-  @Field((type) => User, { nullable: true })
+  @Field(() => User, { nullable: true })
   author?: User | null
+
+  @Field(() => String, { nullable: true })
+  authorId?: string | null
+}
+
+@InputType()
+export class PostCreateInput {
+  @Field()
+  title: string
+
+  @Field({ nullable: true })
+  content: string
+}
+
+@InputType()
+export class PostOrderByUpdatedAtInput {
+  @Field(() => SortOrder)
+  updatedAt: SortOrder
+}
+
+export enum SortOrder {
+  asc = 'asc',
+  desc = 'desc',
 }

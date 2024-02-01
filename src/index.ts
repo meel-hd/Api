@@ -6,8 +6,9 @@ import { GraphQLScalarType } from 'graphql'
 import { DateTimeResolver } from 'graphql-scalars'
 import * as tq from 'type-graphql'
 import { Context, context } from './context/index'
-import { PostCreateInput, PostResolver, SortOrder } from './graphql/resolvers/Post/PostResolver'
+import { PostResolver } from './graphql/resolvers/Post/PostResolver'
 import { UserResolver } from './graphql/resolvers/User/UserResolver'
+import { PostCreateInput, SortOrder } from './graphql/schema/Post'
 
 
 const app = async () => {
