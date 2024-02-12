@@ -42,8 +42,6 @@ export class UserUniqueInput {
 @InputType()
 export class CreateUserInput {
   @Field()
+  @IsEmail()
   email: string
-
-  @Field({ nullable: true })
-  name: string
 }

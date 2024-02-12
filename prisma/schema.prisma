@@ -8,17 +8,30 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(cuid())
-  email String  @unique
-  name  String?
-  profilePic Int @default(1) // from 1 to 40
-  nickname  String?
-  bio  String?
-  posts Post[]
+  id                  String               @id @default(cuid())
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt @default(now())
+  email               String               @unique
+  name                String?
+  profilePic          Int                  @default(1) // from 1 to 40
+  nickname            String?
+  bio                 String?
+  posts               Post[]
+  Verification_Tokens Verification_Token[]
+}
+
+model Verification_Token {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  targetUser   User?     @relation(fields: [targetUserId], references: [id])
+  targetUserId String
+  token        Int // 6 integer long token
+  expired      Boolean
 }
 
 model Post {
-  id        String      @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String

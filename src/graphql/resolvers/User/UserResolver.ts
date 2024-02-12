@@ -11,6 +11,7 @@ import {
 import { Context } from '../../../context'
 import { Post } from '../../schema/Post'
 import { CreateUserInput, User, UserUniqueInput } from '../../schema/User'
+import { UserService } from './services'
 
 
 @Resolver(User)
@@ -26,15 +27,9 @@ export class UserResolver {
       .posts()
   }
 
-  @Mutation(() => User)
-  async signupUser(@Arg('data') data: CreateUserInput, @Ctx() ctx: Context,): Promise<User> {
-
-    return ctx.prisma.user.create({
-      data: {
-        email: data.email,
-        name: data.name,
-      },
-    })
+  @Mutation(() => Boolean)
+  async signupUser(@Arg('data') data: CreateUserInput, @Ctx() ctx: Context,): Promise<Boolean> {
+    return new UserService(ctx).signupUser(data)
   }
 
   @Query(() => [User])
