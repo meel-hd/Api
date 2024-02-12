@@ -10,7 +10,7 @@ import {
 } from 'type-graphql'
 import { Context } from '../../../context'
 import { Post } from '../../schema/Post'
-import { User, UserCreateInput, UserUniqueInput } from '../../schema/User'
+import { CreateUserInput, User, UserUniqueInput } from '../../schema/User'
 
 
 @Resolver(User)
@@ -27,21 +27,12 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async signupUser(
-    @Arg('data') data: UserCreateInput,
-    @Ctx() ctx: Context,
-  ): Promise<User> {
-    const postData = data.posts?.map((post) => {
-      return { title: post.title, content: post.content || undefined }
-    })
+  async signupUser(@Arg('data') data: CreateUserInput, @Ctx() ctx: Context,): Promise<User> {
 
     return ctx.prisma.user.create({
       data: {
         email: data.email,
         name: data.name,
-        posts: {
-          create: postData,
-        },
       },
     })
   }
