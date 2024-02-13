@@ -1,6 +1,11 @@
 import { Context } from "../../../../../context";
 import { UpdateUserInput, User } from "../../../../schema/User";
 
+/** Update the profile info of a user
+ *  @args userEmail the email of the email to update,
+ *  @dataToUpdate bio, name, nickname, and profilePic.
+ *  @returns the updated user if the operation was successful, an error otherwise.
+ */
 async function updateUserProfileService(ctx: Context, args: UpdateUserInput): Promise<User> {
     const foundTargetUser = await ctx.prisma.user.findUnique({
         where: {email: args.userEmail}
