@@ -1,6 +1,7 @@
 import { randomInt } from "crypto";
 import { Context } from "../../../../context";
-import { CreateUserInput } from "../../../schema/User";
+import { CreateUserInput, UpdateUserInput, User } from "../../../schema/User";
+import updateUserProfileService from "./updateProfile";
 
 
 export class UserService {
@@ -47,5 +48,9 @@ export class UserService {
 
         // Successfull
         return true;
+    }
+
+    async updateProfile(args:UpdateUserInput): Promise<User>{
+        return updateUserProfileService(this.context,args)
     }
 }

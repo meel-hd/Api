@@ -10,7 +10,7 @@ import {
 } from 'type-graphql'
 import { Context } from '../../../context'
 import { Post } from '../../schema/Post'
-import { CreateUserInput, User, UserUniqueInput } from '../../schema/User'
+import { CreateUserInput, UpdateUserInput, User, UserUniqueInput } from '../../schema/User'
 import { UserService } from './services'
 
 
@@ -28,8 +28,13 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async signupUser(@Arg('data') data: CreateUserInput, @Ctx() ctx: Context,): Promise<Boolean> {
-    return new UserService(ctx).signupUser(data)
+  async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<Boolean> {
+    return new UserService(ctx).signupUser(args);
+  }
+
+  @Mutation(() => User)
+  async updateProfile(@Arg('args') args: UpdateUserInput, @Ctx() ctx: Context): Promise<User> {
+    return new UserService(ctx).updateProfile(args);
   }
 
   @Query(() => [User])

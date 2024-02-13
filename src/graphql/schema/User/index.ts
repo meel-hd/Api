@@ -1,6 +1,6 @@
 import { IsEmail, Max, Min } from 'class-validator'
 import 'reflect-metadata'
-import { Field, ID, InputType, ObjectType } from 'type-graphql'
+import { Field, ID, InputType, ObjectType, } from 'type-graphql'
 import { Post } from '../Post'
 
 @ObjectType()
@@ -44,4 +44,25 @@ export class CreateUserInput {
   @Field()
   @IsEmail()
   email: string
+}
+
+@InputType()
+export class UpdateUserInput {
+  @Field()
+  @IsEmail()
+  userEmail: string;
+
+  @Field(() => String, { nullable: true })
+  name?: string | null
+
+  @Field(() => Number)
+  @Min(1)
+  @Max(40)
+  profilePic: number
+
+  @Field(() => String, { nullable: true })
+  nickname?: string | null
+
+  @Field(() => String, { nullable: true })
+  bio?: string | null
 }
