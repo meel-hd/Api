@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 import {
   Arg,
+  Authorized,
   Ctx,
   FieldResolver,
   Mutation,
@@ -31,7 +32,8 @@ export class UserResolver {
   async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<Boolean> {
     return new UserService(ctx).signupUser(args);
   }
-
+  
+  @Authorized()
   @Mutation(() => User)
   async updateProfile(@Arg('args') args: UpdateUserInput, @Ctx() ctx: Context): Promise<User> {
     return new UserService(ctx).updateProfile(args);
