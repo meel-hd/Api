@@ -11,7 +11,7 @@ import {
 } from 'type-graphql'
 import { Context } from '../../../context'
 import { Post } from '../../schema/Post'
-import { CreateUserInput, UpdateUserInput, User, UserUniqueInput } from '../../schema/User'
+import { CreateUserInput, UpdateMyProfileInput, User, UserUniqueInput } from '../../schema/User'
 import { UserService } from './services'
 
 
@@ -35,7 +35,7 @@ export class UserResolver {
   
   @Authorized()
   @Mutation(() => User)
-  async updateProfile(@Arg('args') args: UpdateUserInput, @Ctx() ctx: Context): Promise<User> {
+  async updateProfile(@Arg('args') args: UpdateMyProfileInput, @Ctx() ctx: Context): Promise<User> {
     return new UserService(ctx).updateProfile(args);
   }
 

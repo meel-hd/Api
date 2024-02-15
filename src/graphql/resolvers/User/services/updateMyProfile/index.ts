@@ -1,14 +1,14 @@
 import { Context } from "../../../../../context";
-import { UpdateUserInput, User } from "../../../../schema/User";
+import { UpdateMyProfileInput, User } from "../../../../schema/User";
 
-/** Update the profile info of a user
+/** Update the profile info of the user
  *  @args userEmail the email of the email to update,
  *  @dataToUpdate bio, name, nickname, and profilePic.
  *  @returns the updated user if the operation was successful, an error otherwise.
  */
-async function updateUserProfileService(ctx: Context, args: UpdateUserInput): Promise<User> {
+async function updateMyProfileService(ctx: Context, args: UpdateMyProfileInput): Promise<User> {
     const foundTargetUser = await ctx.prisma.user.findUnique({
-        where: {email: args.userEmail}
+        where: {email: ctx.user?.email}
     })
     if(!foundTargetUser){
         throw Error('User to update not found.')
@@ -27,4 +27,4 @@ async function updateUserProfileService(ctx: Context, args: UpdateUserInput): Pr
     return updatedUser;
 }
 
-export default updateUserProfileService;
+export default updateMyProfileService;

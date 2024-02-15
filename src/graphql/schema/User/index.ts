@@ -47,11 +47,7 @@ export class CreateUserInput {
 }
 
 @InputType()
-export class UpdateUserInput {
-  @Field()
-  @IsEmail()
-  userEmail: string;
-
+export class UpdateMyProfileInput {
   @Field(() => String, { nullable: true })
   name?: string | null
 

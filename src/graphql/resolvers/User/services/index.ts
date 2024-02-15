@@ -1,7 +1,7 @@
 import { Context } from "../../../../context";
-import { CreateUserInput, UpdateUserInput, User } from "../../../schema/User";
+import { CreateUserInput, UpdateMyProfileInput, User } from "../../../schema/User";
 import signupUserService from "./signupUser";
-import updateUserProfileService from "./updateProfile";
+import updateMyProfileService from "./updateMyProfile";
 
 
 export class UserService {
@@ -13,7 +13,7 @@ export class UserService {
         return signupUserService(this.context, args)
     }
 
-    async updateProfile(args: UpdateUserInput): Promise<User> {
-        return updateUserProfileService(this.context, args)
+    async updateProfile(args: UpdateMyProfileInput): Promise<User> {
+        return updateMyProfileService(this.context, args)
     }
 }
