@@ -5,6 +5,7 @@ import {
   Ctx,
   FieldResolver,
   Mutation,
+  Query,
   Resolver,
   Root
 } from 'type-graphql'
@@ -16,6 +17,23 @@ import { UserService } from './services'
 
 @Resolver(User)
 export class UserResolver {
+  @Mutation(() => Boolean)
+  async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<Boolean> {
+    return new UserService(ctx).signupUser(args);
+  }
+
+  @Authorized()
+  @Mutation(() => User)
+  async updateMyProfile(@Arg('args') args: UpdateMyProfileInput, @Ctx() ctx: Context): Promise<User> {
+    return new UserService(ctx).updateMyProfile(args);
+  }
+
+  @Authorized()
+  @Query(() => User, { nullable: true })
+  async getUser(@Arg('userId') userId: string, @Ctx() ctx: Context): Promise<User | null> {
+    return new UserService(ctx).getUser(userId);
+  }
+
   @FieldResolver()
   async posts(@Root() user: User, @Ctx() ctx: Context): Promise<Post[] | null> {
     return ctx.prisma.user
@@ -25,16 +43,5 @@ export class UserResolver {
         },
       })
       .posts()
-  }
-
-  @Mutation(() => Boolean)
-  async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<Boolean> {
-    return new UserService(ctx).signupUser(args);
-  }
-  
-  @Authorized()
-  @Mutation(() => User)
-  async updateMyProfile(@Arg('args') args: UpdateMyProfileInput, @Ctx() ctx: Context): Promise<User> {
-    return new UserService(ctx).updateMyProfile(args);
   }
 }

@@ -1,0 +1,16 @@
+import { Context } from "../../../../../context";
+import { User } from "../../../../schema/User";
+
+/**
+ * Gets a user by his id
+ * @retruns a user if exists, or null otherwise.
+ */
+async function getUserService(context: Context, userId: string): Promise<User | null> {
+    return await context.prisma.user.findUnique({
+        where: {
+            id: userId
+        }
+    })
+}
+
+export default getUserService;
