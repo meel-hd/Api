@@ -13,7 +13,7 @@ export class UserService {
         return signupUserService(this.context, args)
     }
 
-    async updateProfile(args: UpdateMyProfileInput): Promise<User> {
+    async updateMyProfile(args: UpdateMyProfileInput): Promise<User> {
         return updateMyProfileService(this.context, args)
     }
 }
