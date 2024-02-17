@@ -2,6 +2,8 @@ import { Context } from "../../../../context";
 import { CreateUserInput, UpdateMyProfileInput, User } from "../../../schema/User";
 import getUserService from "./getUser";
 import signupUserService from "./signupUser";
+import confirmSignupService from "./signupUser/confirmSignup";
+import { confirmSignupInput, confirmSignupOutput } from "./types";
 import updateMyProfileService from "./updateMyProfile";
 
 
@@ -12,6 +14,10 @@ export class UserService {
     }
     async signupUser(args: CreateUserInput): Promise<boolean> {
         return signupUserService(this.context, args)
+    }
+
+    async confirmSignup(args: confirmSignupInput): Promise<confirmSignupOutput> {
+        return confirmSignupService(this.context, args);
     }
 
     async updateMyProfile(args: UpdateMyProfileInput): Promise<User> {

@@ -27,7 +27,6 @@ model Verification_Token {
   targetUser   User?     @relation(fields: [targetUserId], references: [id])
   targetUserId String
   token        Int // 6 integer long token
-  expired      Boolean
 }
 
 model Post {

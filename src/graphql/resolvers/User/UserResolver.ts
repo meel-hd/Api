@@ -13,6 +13,7 @@ import { Context } from '../../../context'
 import { Post } from '../../schema/Post'
 import { CreateUserInput, UpdateMyProfileInput, User } from '../../schema/User'
 import { UserService } from './services'
+import { confirmSignupInput, confirmSignupOutput } from './services/types'
 
 
 @Resolver(User)
@@ -22,6 +23,10 @@ export class UserResolver {
     return new UserService(ctx).signupUser(args);
   }
 
+  @Mutation(() => confirmSignupOutput)
+  async confirmSignup(@Arg('args') args: confirmSignupInput, @Ctx() ctx: Context): Promise<confirmSignupOutput> {
+    return new UserService(ctx).confirmSignup(args);
+  }
   @Authorized()
   @Mutation(() => User)
   async updateMyProfile(@Arg('args') args: UpdateMyProfileInput, @Ctx() ctx: Context): Promise<User> {
