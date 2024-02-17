@@ -12,7 +12,7 @@ export class UserService {
     constructor(context: Context) {
         this.context = context;
     }
-    async signupUser(args: CreateUserInput): Promise<boolean> {
+    async signupUser(args: CreateUserInput): Promise<User> {
         return signupUserService(this.context, args)
     }
 

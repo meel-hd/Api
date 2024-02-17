@@ -18,8 +18,8 @@ import { confirmSignupInput, confirmSignupOutput } from './services/types'
 
 @Resolver(User)
 export class UserResolver {
-  @Mutation(() => Boolean)
-  async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<Boolean> {
+  @Mutation(() => User)
+  async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<User> {
     return new UserService(ctx).signupUser(args);
   }
 
@@ -27,6 +27,7 @@ export class UserResolver {
   async confirmSignup(@Arg('args') args: confirmSignupInput, @Ctx() ctx: Context): Promise<confirmSignupOutput> {
     return new UserService(ctx).confirmSignup(args);
   }
+
   @Authorized()
   @Mutation(() => User)
   async updateMyProfile(@Arg('args') args: UpdateMyProfileInput, @Ctx() ctx: Context): Promise<User> {
