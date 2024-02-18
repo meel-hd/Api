@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 import { Field, ID, InputType, Int, ObjectType } from 'type-graphql'
 import { User } from '../User'
+import { PostType } from '@prisma/client'
 
 @ObjectType()
 export class Post {
@@ -13,17 +14,18 @@ export class Post {
   @Field(() => Date)
   updatedAt: Date
 
-  @Field()
-  title: string
-
-  @Field(() => String, { nullable: true })
-  content: string | null
-
-  @Field(() => Boolean)
-  published: boolean
+  @Field(() => String)
+  content: string
 
   @Field(() => Int)
   viewCount: number
+
+  @Field(() => Int)
+  likesCount: number
+  
+  @Field(() => PostType)
+  postType: PostType
+  
 
   @Field(() => User, { nullable: true })
   author?: User | null
@@ -33,12 +35,16 @@ export class Post {
 }
 
 @InputType()
-export class PostCreateInput {
-  @Field()
-  title: string
+export class CreatePostInput {
 
-  @Field({ nullable: true })
-  content: string
+  @Field()
+  content: string  
+  
+  @Field(() => PostType)
+  postType: PostType
+
+  @Field(() => String)
+  authorId: string
 }
 
 @InputType()

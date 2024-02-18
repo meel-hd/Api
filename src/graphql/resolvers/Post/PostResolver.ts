@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 import {
   Arg,
+  Authorized,
   Ctx,
   FieldResolver,
   ID,
@@ -11,12 +12,20 @@ import {
   Root
 } from 'type-graphql'
 import { Context } from '../../../context'
-import { Post, PostCreateInput, PostOrderByUpdatedAtInput } from '../../schema/Post'
+import { CreatePostInput, Post, PostOrderByUpdatedAtInput } from '../../schema/Post'
 import { User } from '../../schema/User'
+import PostServices from './services'
 
 
 @Resolver(Post)
 export class PostResolver {
+
+  @Authorized()
+  @Mutation(() => Post)
+  createPost(@Arg('args') args: CreatePostInput, @Ctx() ctx: Context): Promise<Post> {
+    return new PostServices(ctx).createPost(args);
+  }
+
   @FieldResolver()
   author(@Root() post: Post, @Ctx() ctx: Context): Promise<User | null> {
     return ctx.prisma.post
@@ -54,7 +63,7 @@ export class PostResolver {
 
     return ctx.prisma.post.findMany({
       where: {
-        published: true,
+        // published: true,
         ...or,
       },
       take: take || undefined,
@@ -63,56 +72,7 @@ export class PostResolver {
     })
   }
 
-  @Mutation(() => Post)
-  async createDraft(
-    @Arg('data') data: PostCreateInput,
-    @Arg('authorEmail') authorEmail: string,
 
-    @Ctx() ctx: Context,
-  ) {
-    return ctx.prisma.post.create({
-      data: {
-        title: data.title,
-        content: data.content,
-        author: {
-          connect: { email: authorEmail },
-        },
-      },
-    })
-  }
-
-  @Mutation(() => Post, { nullable: true })
-  async togglePublishPost(
-    @Arg('id', () => ID) id: string,
-    @Ctx() ctx: Context,
-  ) {
-    const post = await ctx.prisma.post.findUnique({
-      where: { id: id || undefined },
-      select: {
-        published: true,
-      },
-    })
-
-    return ctx.prisma.post.update({
-      where: { id: id || undefined },
-      data: { published: !post?.published },
-    })
-  }
-
-  @Mutation(() => Post, { nullable: true })
-  async incrementPostViewCount(
-    @Arg('id', () => ID) id: string,
-    @Ctx() ctx: Context,
-  ) {
-    return ctx.prisma.post.update({
-      where: { id: id || undefined },
-      data: {
-        viewCount: {
-          increment: 1,
-        },
-      },
-    })
-  }
 
   @Mutation((returns) => Post, { nullable: true })
   async deletePost(@Arg('id', () => ID) id: string, @Ctx() ctx: Context) {

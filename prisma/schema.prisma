@@ -10,7 +10,7 @@ datasource db {
 model User {
   id                  String               @id @default(cuid())
   createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt @default(now())
+  updatedAt           DateTime             @default(now()) @updatedAt
   email               String               @unique
   name                String?
   profilePic          Int                  @default(1) // from 1 to 40
@@ -24,19 +24,25 @@ model Verification_Token {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  targetUser   User?     @relation(fields: [targetUserId], references: [id])
+  targetUser   User?    @relation(fields: [targetUserId], references: [id])
   targetUserId String
   token        Int // 6 integer long token
 }
 
+enum PostType {
+  NORMAL
+  ANONYMOUS
+  PRIVATE
+}
+
 model Post {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  viewCount Int      @default(0)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  content    String
+  viewCount  Int      @default(0)
+  likesCount Int      @default(0)
+  postType   PostType 
+  author     User?    @relation(fields: [authorId], references: [id])
+  authorId   String?
 }

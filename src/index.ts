@@ -8,11 +8,13 @@ import buildContext from './context/buildContext'
 import { ConfirmSignupErrorMessage } from './graphql/resolvers/User/services/types'
 import buildSchema from './graphql/schema'
 import { SortOrder } from './graphql/schema/Post'
+import { PostType } from '@prisma/client'
 
 
 const app = async () => {
   tq.registerEnumType(SortOrder, { name: 'SortOrder', });
   tq.registerEnumType(ConfirmSignupErrorMessage, { name: 'ConfirmSignupErrorMessage', });
+  tq.registerEnumType(PostType, { name: 'PostType', });
 
   const server = new ApolloServer<Context>({ schema: await buildSchema() })
   const { url } = await startStandaloneServer(server, { context: buildContext })
