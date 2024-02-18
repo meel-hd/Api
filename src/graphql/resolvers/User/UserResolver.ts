@@ -34,12 +34,13 @@ export class UserResolver {
     return new UserService(ctx).updateMyProfile(args);
   }
 
-  @Authorized()
+  // @Authorized()
   @Query(() => User, { nullable: true })
   async getUser(@Arg('userId') userId: string, @Ctx() ctx: Context): Promise<User | null> {
     return new UserService(ctx).getUser(userId);
   }
 
+  @Authorized()
   @FieldResolver()
   async posts(@Root() user: User, @Ctx() ctx: Context): Promise<Post[] | null> {
     return ctx.prisma.user
