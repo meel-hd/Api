@@ -4,11 +4,10 @@ import * as tq from 'type-graphql'
 import { authChecker } from '../../auth'
 import { PostResolver } from '../resolvers/Post/PostResolver'
 import { UserResolver } from '../resolvers/User/UserResolver'
-import { PostCreateInput } from '../schema/Post'
 
 async function buildSchema() {
     const schema = await tq.buildSchema({
-        resolvers: [PostResolver, UserResolver, PostCreateInput],
+        resolvers: [PostResolver, UserResolver],
         scalarsMap: [{ type: GraphQLScalarType, scalar: DateTimeResolver }],
         authChecker: authChecker
     })
