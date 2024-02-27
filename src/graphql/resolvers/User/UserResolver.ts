@@ -18,6 +18,13 @@ import { confirmSignupInput, confirmSignupOutput } from './services/types'
 
 @Resolver(User)
 export class UserResolver {
+  @Authorized()
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() ctx: Context): Promise<User | null> {
+    return new UserService(ctx).me();
+  }
+
+
   @Mutation(() => User)
   async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<User> {
     return new UserService(ctx).signupUser(args);
