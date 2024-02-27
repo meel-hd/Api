@@ -2,6 +2,9 @@ import { Context } from "../../../../../context";
 import { CreatePostInput, Post } from "../../../../schema/Post";
 
 async function CreatePostService(ctx: Context, args: CreatePostInput): Promise<Post> {
+    if(args.authorId !== ctx.user?.id){
+        throw Error("Error:1010") // Forbidden
+    }
     const author = await ctx.prisma.user.findUnique({ where: { id: args.authorId } })
     if (!author) {
         throw Error("Error:1011") // Author not found
