@@ -3,6 +3,8 @@ import { User } from "../../../../schema/User";
 
 /**
  * Gets a user by his id
+ * @param context The current query excution context.
+ * @param userId the wanted user id
  * @retruns a user if exists, or null otherwise.
  */
 async function getUserService(context: Context, userId: string): Promise<User | null> {

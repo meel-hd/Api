@@ -7,7 +7,9 @@ import confirmSignupService from "./signupUser/confirmSignup";
 import { confirmSignupInput, confirmSignupOutput } from "./types";
 import updateMyProfileService from "./updateMyProfile";
 
-
+/**
+ * Exposes all `User` related services and operations.
+ */
 export class UserService {
     context: Context;
     constructor(context: Context) {

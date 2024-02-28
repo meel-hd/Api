@@ -2,8 +2,8 @@ import { Context } from "../../../../../../context";
 import { ConfirmSignupErrorMessage, confirmSignupInput, confirmSignupOutput } from "../../types";
 
 /** Confirms a user signup through a token
- * @argument userId the of user that it is going to signup
- * @argument token  possibly invalid verification token 
+ * @argument `userId` the of user that it is going to signup
+ * @argument `token` possibly invalid verification token 
  * @returns `successful` true and set a valid auth cookie if the token is valid,
  * or `successful` false if the token is invalid, with `message` indicating why
  * confirmation failed
