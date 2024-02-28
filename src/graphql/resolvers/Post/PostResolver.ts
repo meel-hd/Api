@@ -26,6 +26,7 @@ export class PostResolver {
     return new PostServices(ctx).createPost(args);
   }
 
+  @Authorized()
   @FieldResolver()
   author(@Root() post: Post, @Ctx() ctx: Context): Promise<User | null> {
     return ctx.prisma.post
@@ -37,6 +38,13 @@ export class PostResolver {
       .author()
   }
 
+  @Authorized()
+  @Mutation(() => Post, { nullable: true })
+  async deletePost(@Arg('id', () => ID) id: string, @Ctx() ctx: Context) {
+    return new PostServices(ctx).deletePost(id);
+  }
+
+  @Authorized()
   @Query(() => Post, { nullable: true })
   async postById(@Arg('id') id: string, @Ctx() ctx: Context) {
     return ctx.prisma.post.findUnique({
@@ -72,14 +80,4 @@ export class PostResolver {
     })
   }
 
-
-
-  @Mutation((returns) => Post, { nullable: true })
-  async deletePost(@Arg('id', () => ID) id: string, @Ctx() ctx: Context) {
-    return ctx.prisma.post.delete({
-      where: {
-        id,
-      },
-    })
-  }
 }
