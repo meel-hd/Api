@@ -26,8 +26,8 @@ export class UserResolver {
   }
 
   /** The first step in signing up a user. */
-  @Mutation(() => User)
-  async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<User> {
+  @Mutation(() => User, {nullable: true})
+  async signupUser(@Arg('args') args: CreateUserInput, @Ctx() ctx: Context): Promise<User | null> {
     return new UserService(ctx).signupUser(args);
   }
 

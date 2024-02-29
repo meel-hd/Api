@@ -10,16 +10,16 @@ import { CreateUserInput, User } from "../../../../schema/User";
  *
  * @param ctx The current mutation excution context.
  * @param args contains the `email` of the user to signup.
- * @returns the `User` data if operation was successful, an error otherwise.
+ * @returns the `User` data if operation was successful, `null` otherwise.
  */
 // TODO: return null if the operation failed instead of throwing an error
-async function signupUserService(ctx: Context, args: CreateUserInput): Promise<User> {
+async function signupUserService(ctx: Context, args: CreateUserInput): Promise<User | null> {
     let createdUser = await ctx.prisma.user.findUnique({ where: { email: args.email } })
     // New user
     if (createdUser == null) {
         createdUser = await ctx.prisma.user.create({ data: { email: args.email } })
         if (createdUser == null) {
-            throw Error('Failed to create user')
+            return null // Failed to create user
         }
     } else {
         // Delete old verification tokens
@@ -39,7 +39,7 @@ async function signupUserService(ctx: Context, args: CreateUserInput): Promise<U
         }
     });
     if (verification_token == null) {
-        throw Error("Error:3939") // Failed to create token
+        return null // Failed to create token
     }
 
     // TODO: Send email to the user with the verification token

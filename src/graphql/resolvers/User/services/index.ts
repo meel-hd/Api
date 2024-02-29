@@ -18,7 +18,7 @@ export class UserService {
     async me(): Promise<User | null> {
         return meService(this.context);
     }
-    async signupUser(args: CreateUserInput): Promise<User> {
+    async signupUser(args: CreateUserInput): Promise<User | null> {
         return signupUserService(this.context, args)
     }
 
