@@ -16,16 +16,18 @@ import { CreatePostInput, Post, PostOrderByUpdatedAtInput } from '../../schema/P
 import { User } from '../../schema/User'
 import PostServices from './services'
 
-
+/** A type-graphql resolver for post related queries and mutations. */
 @Resolver(Post)
 export class PostResolver {
-
+  // TODO: The author id should be gotten from the context not user input
+  /** A mutation to create a new posot */
   @Authorized()
   @Mutation(() => Post)
   createPost(@Arg('args') args: CreatePostInput, @Ctx() ctx: Context): Promise<Post> {
     return new PostServices(ctx).createPost(args);
   }
 
+  /** A Field resolver for the sub field author in the other mutations and queries. */
   @Authorized()
   @FieldResolver()
   author(@Root() post: Post, @Ctx() ctx: Context): Promise<User | null> {
@@ -38,12 +40,14 @@ export class PostResolver {
       .author()
   }
 
+  /** A mutation to delete a post. */
   @Authorized()
   @Mutation(() => Post, { nullable: true })
   async deletePost(@Arg('id', () => ID) id: string, @Ctx() ctx: Context) {
     return new PostServices(ctx).deletePost(id);
   }
 
+  /** A query to get a specific post data. */
   @Authorized()
   @Query(() => Post, { nullable: true })
   async postById(@Arg('id') id: string, @Ctx() ctx: Context) {

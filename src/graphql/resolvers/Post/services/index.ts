@@ -3,6 +3,9 @@ import { CreatePostInput, Post } from "../../../schema/Post";
 import CreatePostService from "./CreatePostService";
 import DeletePostService from "./DeletePostService";
 
+/**
+ * Exposes all `Post` related services and operations.
+ */
 class PostServices {
     conext: Context;
     constructor(context: Context) {

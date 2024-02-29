@@ -12,7 +12,7 @@ async function DeletePostService(ctx: Context, postId: string): Promise<Post | n
     let deletedPost = await ctx.prisma.post.delete({
         where: {
             id: postId,
-            authorId: ctx.user?.id // The user is the post creator
+            authorId: ctx.user?.id // The user should be the post creator
         }
     }).catch(() => {
         return null;
