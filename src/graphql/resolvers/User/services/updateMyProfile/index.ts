@@ -6,12 +6,15 @@ import { UpdateMyProfileInput, User } from "../../../../schema/User";
  *  @dataToUpdate bio, name, nickname, and profilePic.
  *  @returns the updated user if the operation was successful, an error otherwise.
  */
-async function updateMyProfileService(ctx: Context, args: UpdateMyProfileInput): Promise<User> {
+async function updateMyProfileService(ctx: Context, args: UpdateMyProfileInput): Promise<User | null> {
     const foundTargetUser = await ctx.prisma.user.findUnique({
-        where: {email: ctx.user?.email}
+        where: { email: ctx.user?.email }
     })
-    if(!foundTargetUser){
-        throw Error('User to update not found.')
+        .catch(err => {
+            return null;
+        })
+    if (!foundTargetUser) {
+        return null; //User to update not found
     }
     const updatedUser = ctx.prisma.user.update({
         where: { id: foundTargetUser.id }, data: {
@@ -20,9 +23,11 @@ async function updateMyProfileService(ctx: Context, args: UpdateMyProfileInput):
             nickname: args.nickname,
             profilePic: args.profilePic
         }
+    }).catch(err => {
+        return null;
     })
-    if(!updatedUser){
-        throw Error('Failed to update user.')
+    if (!updatedUser) {
+        return null; // Failed to update user.
     }
     return updatedUser;
 }

@@ -12,6 +12,8 @@ async function getUserService(context: Context, userId: string): Promise<User | 
         where: {
             id: userId
         }
+    }).catch(err => {
+        return null;
     })
 }
 

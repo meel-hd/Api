@@ -26,7 +26,7 @@ export class UserService {
         return confirmSignupService(this.context, args);
     }
 
-    async updateMyProfile(args: UpdateMyProfileInput): Promise<User> {
+    async updateMyProfile(args: UpdateMyProfileInput): Promise<User | null> {
         return updateMyProfileService(this.context, args)
     }
 

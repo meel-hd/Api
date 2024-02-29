@@ -39,8 +39,8 @@ export class UserResolver {
 
   /** A mutation to update the current logged in `User` profile info. */
   @Authorized()
-  @Mutation(() => User)
-  async updateMyProfile(@Arg('args') args: UpdateMyProfileInput, @Ctx() ctx: Context): Promise<User> {
+  @Mutation(() => User, {nullable: true})
+  async updateMyProfile(@Arg('args') args: UpdateMyProfileInput, @Ctx() ctx: Context): Promise<User | null> {
     return new UserService(ctx).updateMyProfile(args);
   }
 
