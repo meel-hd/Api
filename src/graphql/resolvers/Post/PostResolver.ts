@@ -19,11 +19,10 @@ import PostServices from './services'
 /** A type-graphql resolver for post related queries and mutations. */
 @Resolver(Post)
 export class PostResolver {
-  // TODO: The author id should be gotten from the context not user input
   /** A mutation to create a new posot */
   @Authorized()
-  @Mutation(() => Post)
-  createPost(@Arg('args') args: CreatePostInput, @Ctx() ctx: Context): Promise<Post> {
+  @Mutation(() => Post, {nullable: true})
+  createPost(@Arg('args') args: CreatePostInput, @Ctx() ctx: Context): Promise<Post | null> {
     return new PostServices(ctx).createPost(args);
   }
 

@@ -12,7 +12,7 @@ class PostServices {
         this.conext = context
     }
 
-    async createPost(args: CreatePostInput): Promise<Post> {
+    async createPost(args: CreatePostInput): Promise<Post | null> {
         return await CreatePostService(this.conext, args);
     }
 

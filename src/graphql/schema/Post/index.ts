@@ -36,15 +36,11 @@ export class Post {
 
 @InputType()
 export class CreatePostInput {
-
   @Field()
   content: string  
   
   @Field(() => PostType)
   postType: PostType
-
-  @Field(() => String)
-  authorId: string
 }
 
 @InputType()
