@@ -7,6 +7,13 @@ interface Params {
   res: ServerResponse<IncomingMessage>
 }
 
+
+/**
+ * A middleware to build/add the components of our complete described context.
+ *  @see  ../index.ts `Context` type, for the compelete description of the context.
+ * @param object containg `request` and `response` interfaces of the call.
+ * @returns a complete context as described in `Context` type.
+ */
 async function buildContext({ req, res }: Params) {
   // TODO: Get user info using jwt
   const jwtUser = { id: req.headers.cookie };
