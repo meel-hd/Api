@@ -55,6 +55,13 @@ export class PostResolver {
     })
   }
 
+  /** A mutation to increament post view count */
+  @Authorized()
+  @Mutation(() => Post, {nullable : true})
+  async increamentPostViewCount(@Arg('postId') postId: string, @Ctx() ctx: Context): Promise<Post | null> {
+    return new PostServices(ctx).increamentPostViewCount(postId);
+  }
+
   @Query(() => [Post])
   async feed(
     @Arg('searchString', { nullable: true }) searchString: string,
