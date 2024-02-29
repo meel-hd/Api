@@ -1,4 +1,5 @@
 import { Context } from "../../../../../context";
+import errorReporter from "../../../../../lib/error/reportError";
 import { User } from "../../../../schema/User";
 
 /**
@@ -11,6 +12,13 @@ async function meService(context: Context): Promise<User | null> {
         where: {
             id: context.user?.id
         }
+    }).catch(err => {
+        errorReporter(err, {
+            message: "Prisma failed to get user from db, userId: " + context.user?.id,
+            sourceCaller: "meService",
+            sourceFile: "resolvers/User/services/me/index.ts"
+        })
+        return null;
     })
 };
 

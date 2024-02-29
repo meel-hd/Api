@@ -1,4 +1,5 @@
 import { Context } from "../../../../../../context";
+import errorReporter from "../../../../../../lib/error/reportError";
 import { ConfirmSignupErrorMessage, confirmSignupInput, confirmSignupOutput } from "../../types";
 
 /** Confirms a user signup through a token
@@ -14,7 +15,13 @@ async function confirmSignupService(context: Context, args: confirmSignupInput):
             targetUserId: args.userId,
             token: args.token
         }
-    });
+    }).catch(err => {
+        errorReporter(err, {
+            message: "Invoke of prisma.verification_Token.findFirst failed, where targetUserId and token are: "
+                + args.userId + " " + args.token,
+            sourceCaller: "confirmSignupService"
+        })
+    })
 
     if (!verification_token) {
         return {
@@ -26,6 +33,12 @@ async function confirmSignupService(context: Context, args: confirmSignupInput):
         // Invalid: too old
         if (tokenAgeInHours > 5) {
             await context.prisma.verification_Token.delete({ where: { id: verification_token.id } })
+                .catch(err => {
+                    errorReporter(err, {
+                        message: "Invoke of prisma.verification_Token.delete failed, where id: " + verification_token.id,
+                        sourceCaller: "confirmSignupService.TooOldToken"
+                    })
+                })
             return {
                 successful: false,
                 message: ConfirmSignupErrorMessage.EXPIRED_TOKEN
@@ -34,6 +47,12 @@ async function confirmSignupService(context: Context, args: confirmSignupInput):
         // Valid token: Authorize
         // TODO: Add jwt based cookie auth instead
         await context.prisma.verification_Token.delete({ where: { id: verification_token.id } })
+            .catch(err => {
+                errorReporter(err, {
+                    message: "Invoke of prisma.verification_Token.delete failed, where id: " + verification_token.id,
+                    sourceCaller: "confirmSignupService // Valid token section"
+                })
+            })
         context.res?.setHeader('cookie', args.userId);
         return {
             successful: true,

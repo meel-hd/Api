@@ -1,4 +1,5 @@
 import { Context } from "../../../../../context";
+import errorReporter from "../../../../../lib/error/reportError";
 import { User } from "../../../../schema/User";
 
 /**
@@ -13,6 +14,11 @@ async function getUserService(context: Context, userId: string): Promise<User | 
             id: userId
         }
     }).catch(err => {
+        errorReporter(err, {
+            message: "Prisma can't get user with this id: " + userId,
+            sourceCaller: "getUserService",
+            sourceFile: "resolvers/User/services/index.ts"
+        })
         return null;
     })
 }

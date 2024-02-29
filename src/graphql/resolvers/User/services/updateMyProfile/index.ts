@@ -1,4 +1,5 @@
 import { Context } from "../../../../../context";
+import errorReporter from "../../../../../lib/error/reportError";
 import { UpdateMyProfileInput, User } from "../../../../schema/User";
 
 /** Update the profile info of the user
@@ -8,9 +9,13 @@ import { UpdateMyProfileInput, User } from "../../../../schema/User";
  */
 async function updateMyProfileService(ctx: Context, args: UpdateMyProfileInput): Promise<User | null> {
     const foundTargetUser = await ctx.prisma.user.findUnique({
-        where: { email: ctx.user?.email }
+        where: { id: ctx.user?.id }
     })
         .catch(err => {
+            errorReporter(err, {
+                message: "Invoke of prisma.user.findUnique failed, where id: " + ctx.user?.id,
+                sourceCaller: "updateMyProfileService"
+            })
             return null;
         })
     if (!foundTargetUser) {
@@ -24,6 +29,10 @@ async function updateMyProfileService(ctx: Context, args: UpdateMyProfileInput):
             profilePic: args.profilePic
         }
     }).catch(err => {
+        errorReporter(err, {
+            message: "Invoke of prisma.user.update failed, where data: " + args,
+            sourceCaller: "updateMyProfileService"
+        })
         return null;
     })
     if (!updatedUser) {
