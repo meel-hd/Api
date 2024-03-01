@@ -1,4 +1,5 @@
 import { Context, context } from "../../../../../context";
+import errorReporter from "../../../../../lib/error/reportError";
 import { CreatePostInput, Post } from "../../../../schema/Post";
 
 /**
@@ -9,13 +10,17 @@ import { CreatePostInput, Post } from "../../../../schema/Post";
  */
 async function CreatePostService(ctx: Context, args: CreatePostInput): Promise<Post | null> {
     const author = await ctx.prisma.user.findUnique({ where: { id: context.user?.id } })
-    .catch(()=> {
-        return null
-    });
-
+        .catch((err) => {
+            errorReporter(err, {
+                message: "Invoke prisma.user.findUnique failed, where id: " + context.user?.id,
+                sourceCaller: "CreatePostService"
+            });
+            return null
+        });
     if (!author) {
         return null // Author not found
     }
+
     const createdPost = await ctx.prisma.post.create({
         data: {
             postType: args.postType,
@@ -23,9 +28,13 @@ async function CreatePostService(ctx: Context, args: CreatePostInput): Promise<P
             author: { connect: { id: author.id } }
         },
     })
-    .catch(() => {
-        return null
-    })
+        .catch((err) => {
+            errorReporter(err, {
+                message: "Invoke prisma.user.create failed, where the post input is: " + args,
+                sourceCaller: "CreatePostService"
+            });
+            return null
+        })
     if (!createdPost) {
         return null // Failed to create post
     }

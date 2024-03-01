@@ -1,4 +1,5 @@
 import { Context } from "../../../../../context";
+import errorReporter from "../../../../../lib/error/reportError";
 import { Post } from "../../../../schema/Post";
 
 /**
@@ -14,6 +15,10 @@ async function IncrementPostViewCountService(ctx: Context, postId: string): Prom
             id: postId
         }
     }).catch(err => {
+        errorReporter(err, {
+            message: "Invoke prisma.post.findUnique failed, where id: " + postId,
+            sourceCaller: "IncrementPostViewCountService"
+        });
         return null;
     });
 
@@ -30,6 +35,10 @@ async function IncrementPostViewCountService(ctx: Context, postId: string): Prom
             id: postToUpdate.id
         }
     }).catch(err => {
+        errorReporter(err, {
+            message: "Invoke prisma.post.update to increament the view count failed, where id: " + postId,
+            sourceCaller: "IncrementPostViewCountService"
+        });
         return null;
     })
 

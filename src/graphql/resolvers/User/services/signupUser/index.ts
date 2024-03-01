@@ -13,7 +13,6 @@ import { CreateUserInput, User } from "../../../../schema/User";
  * @param args contains the `email` of the user to signup.
  * @returns the `User` data if operation was successful, `null` otherwise.
  */
-// TODO: return null if the operation failed instead of throwing an error
 async function signupUserService(ctx: Context, args: CreateUserInput): Promise<User | null> {
     let createdUser = await ctx.prisma.user.findUnique({ where: { email: args.email } })
         .catch(err => {

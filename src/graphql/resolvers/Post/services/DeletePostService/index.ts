@@ -1,4 +1,5 @@
 import { Context } from "../../../../../context";
+import errorReporter from "../../../../../lib/error/reportError";
 import { Post } from "../../../../schema/Post";
 
 /**
@@ -14,7 +15,12 @@ async function DeletePostService(ctx: Context, postId: string): Promise<Post | n
             id: postId,
             authorId: ctx.user?.id // The user should be the post creator
         }
-    }).catch(() => {
+    }).catch((err) => {
+        errorReporter(err, {
+            message: "Invoke prisma.post.delete failed, where id and authorId are: " + postId
+                + ", " + ctx.user?.id,
+            sourceCaller: "DeletePostService"
+        });
         return null;
     })
 
