@@ -1,15 +1,15 @@
-import { Context, context } from "../../../../../context";
+import { Context } from "../../../../../context";
 import errorReporter from "../../../../../lib/error/reportError";
 import { CreatePostInput, Post } from "../../../../schema/Post";
 
 /**
  * The service used by the `createPost` mutation to create a post.
- * @param ctx  the current mutation excution context.
+ * @param context  the current mutation excution context.
  * @param args the data required to create a post.
  * @returns The created post if the operation was successffull.
  */
-async function CreatePostService(ctx: Context, args: CreatePostInput): Promise<Post | null> {
-    const author = await ctx.prisma.user.findUnique({ where: { id: context.user?.id } })
+async function CreatePostService(context: Context, args: CreatePostInput): Promise<Post | null> {
+    const author = await context.prisma.user.findUnique({ where: { id: context.user?.id } })
         .catch((err) => {
             errorReporter(err, {
                 message: "Invoke prisma.user.findUnique failed, where id: " + context.user?.id,
@@ -21,7 +21,7 @@ async function CreatePostService(ctx: Context, args: CreatePostInput): Promise<P
         return null // Author not found
     }
 
-    const createdPost = await ctx.prisma.post.create({
+    const createdPost = await context.prisma.post.create({
         data: {
             postType: args.postType,
             content: args.content,
