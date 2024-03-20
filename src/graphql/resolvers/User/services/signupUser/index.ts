@@ -14,6 +14,15 @@ import { CreateUserInput, User } from "../../../../schema/User";
  * @returns the `User` data if operation was successful, `null` otherwise.
  */
 async function signupUserService(ctx: Context, args: CreateUserInput): Promise<User | null> {
+    // Check if the email is valid
+    const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    if (!emailPattern.test(args.email)) {
+        errorReporter("Invalid Email", {
+            message: "The provided email to the mutation is invalid, email: " + args.email,
+            sourceCaller: "signupUserService"
+        })
+        return null;
+    }
     let createdUser = await ctx.prisma.user.findUnique({ where: { email: args.email } })
         .catch(err => {
             errorReporter(err, {
