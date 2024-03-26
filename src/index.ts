@@ -2,14 +2,17 @@ import 'reflect-metadata'
 
 import { ApolloServer } from '@apollo/server'
 import { startStandaloneServer } from '@apollo/server/standalone'
+import { PostType } from '@prisma/client'
+import dotenv from 'dotenv'
 import * as tq from 'type-graphql'
 import { Context } from './context'
 import buildContext from './context/buildContext'
 import { ConfirmSignupErrorMessage } from './graphql/resolvers/User/services/types'
 import buildSchema from './graphql/schema'
 import { SortOrder } from './graphql/schema/Post'
-import { PostType } from '@prisma/client'
 
+// Load environment variables
+dotenv.config();
 
 const app = async () => {
   /// Manually register the enums used in the type-graphql schema

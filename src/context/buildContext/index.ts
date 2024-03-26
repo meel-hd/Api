@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { Context, context } from "..";
+import verifyAccessToken from "../../auth/verifyAccessToken";
 import { UserContext } from "./userContext";
 
 interface Params {
@@ -15,9 +16,12 @@ interface Params {
  * @returns a complete context as described in `Context` type.
  */
 async function buildContext({ req, res }: Params) {
-  // TODO: Get user info using jwt
-  const jwtUser = { id: req.headers.cookie };
-  const user = jwtUser?.id ? await UserContext.userFromId(jwtUser.id) : undefined;
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  let user;
+  const userId = verifyAccessToken(token)
+  user = userId ? await UserContext.userFromId(userId) : undefined;
+
   const fullContext: Context = {
     prisma: context.prisma,
     req,

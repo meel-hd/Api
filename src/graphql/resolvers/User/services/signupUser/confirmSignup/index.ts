@@ -1,3 +1,4 @@
+import genAccessToken from "../../../../../../auth/genAccessToken";
 import { Context } from "../../../../../../context";
 import errorReporter from "../../../../../../lib/error/reportError";
 import { ConfirmSignupErrorMessage, confirmSignupInput, confirmSignupOutput } from "../../types";
@@ -45,7 +46,6 @@ async function confirmSignupService(context: Context, args: confirmSignupInput):
             };
         }
         // Valid token: Authorize
-        // TODO: Add jwt based cookie auth instead
         await context.prisma.verification_Token.delete({ where: { id: verification_token.id } })
             .catch(err => {
                 errorReporter(err, {
@@ -53,7 +53,8 @@ async function confirmSignupService(context: Context, args: confirmSignupInput):
                     sourceCaller: "confirmSignupService // Valid token section"
                 })
             })
-        context.res?.setHeader('cookie', args.userId);
+        const accessToken = genAccessToken(args.userId)
+        context.res?.setHeader('authorization', `Bearer ${accessToken}`);
         return {
             successful: true,
             message: ConfirmSignupErrorMessage.SUCCESSFULL
