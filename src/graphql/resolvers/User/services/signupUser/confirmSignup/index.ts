@@ -57,7 +57,8 @@ async function confirmSignupService(context: Context, args: confirmSignupInput):
         context.res?.setHeader('authorization', `Bearer ${accessToken}`);
         return {
             successful: true,
-            message: ConfirmSignupErrorMessage.SUCCESSFULL
+            message: ConfirmSignupErrorMessage.SUCCESSFULL,
+            jwt: accessToken
         }
     }
 

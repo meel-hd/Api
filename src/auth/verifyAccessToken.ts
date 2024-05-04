@@ -1,4 +1,5 @@
 import { verify } from "jsonwebtoken";
+import errorReporter from "../lib/error/reportError";
 
 
 /**
@@ -11,7 +12,16 @@ function verifyAccessToken(token: string | undefined | null) {
     let outputUserId: string | undefined;
 
     if (token) {
-        const verification = verify(token, secret);
+        let verification: any = undefined;
+        try {
+            verification = verify(token, secret);
+        } catch (error) {
+            errorReporter(error, {
+                message: 'Verification of access token errored, with token: ' + token,
+                sourceCaller: 'verifyAccessToken'
+            })
+        }
+
         if (typeof verification == 'string') {
             outputUserId = verification;
         }

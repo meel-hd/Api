@@ -22,4 +22,7 @@ export class confirmSignupOutput {
 
     @Field(() => ConfirmSignupErrorMessage)
     message: ConfirmSignupErrorMessage
+
+    @Field(() => String, { nullable: true })
+    jwt?: string
 }
