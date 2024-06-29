@@ -1,5 +1,4 @@
-# Social Graphql
-
+# A GraphQL API for Nur App
 A social media Graphql Api built using typescript, prisma and MySQL.
 
 ## Features
